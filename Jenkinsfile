@@ -8,8 +8,8 @@ pipeline {
         }
         stage('Deploy to Node 1') {
             steps {
-                sshagent(['node1-ssh-key']) {
-                    sh "scp -o StrictHostKeyChecking=no -r * ubuntu@3.110.221.180:/var/www/html/"
+                withCredentials([sshUserPrivateKey(credentialsId: 'node1-ssh-key', keyFileVariable: 'KEY', usernameVariable: 'USER')]) {
+                    sh "scp -o StrictHostKeyChecking=no -i ${KEY} -r * ${USER}@3.110.221.180:/var/www/html/"
                 }
             }
         }
