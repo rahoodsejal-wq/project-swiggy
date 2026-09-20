@@ -14,8 +14,8 @@ pipeline {
     steps {
         sh '''
             echo "Setting up Node.js locally..."
-            curl -O https://nodejs.org/dist/v18.16.0/node-v18.16.0-linux-x64.tar.xz
-            tar -xf node-v18.16.0-linux-x64.tar.xz
+            curl -O https://nodejs.org/dist/v18.16.0/node-v18.16.0-linux-x64.tar.gz
+            tar -xzf node-v18.16.0-linux-x64.tar.gz
             export PATH=$PWD/node-v18.16.0-linux-x64/bin:$PATH
             node -v
             npm -v
