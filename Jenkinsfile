@@ -9,19 +9,19 @@ pipeline {
             }
         }
         
-        stage('Install Dependencies') {
-            steps {
-                // Automatically installs node and npm if missing, then runs install
-                sh '''
-                    export DEBIAN_FRONTEND=noninteractive
-                    if ! command -v npm &> /dev/null; then
-                        echo "npm not found. Installing Node.js and npm..."
-                        apt-get update && apt-get install -y nodejs npm
-                    fi
-                    npm install
-                '''
-            }
-        }
+stage('Install Dependencies') {
+    steps {
+        sh '''
+            echo "Setting up Node.js locally..."
+            curl -O https://nodejs.org/dist/v18.16.0/node-v18.16.0-linux-x64.tar.xz
+            tar -xf node-v18.16.0-linux-x64.tar.xz
+            export PATH=$PWD/node-v18.16.0-linux-x64/bin:$PATH
+            node -v
+            npm -v
+            npm install
+        '''
+    }
+}
         
         stage('Deploy to Node 1 via SCP') {
             steps {
