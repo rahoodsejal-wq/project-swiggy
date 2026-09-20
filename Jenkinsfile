@@ -8,8 +8,9 @@ pipeline {
                 git branch: 'master', url: 'https://github.com/rahoodsejal-wq/project-swiggy'
             }
         }
+
         
-stage('Install Dependencies') {
+    stage('Install Dependencies') {
     steps {
         sh '''
             echo "Setting up Node.js locally..."
@@ -20,8 +21,10 @@ stage('Install Dependencies') {
             npm -v
             npm install
         '''
-    }
-}
+            }
+        }
+        
+
         
         stage('Deploy to Node 1 via SCP') {
             steps {
