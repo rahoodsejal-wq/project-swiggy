@@ -31,7 +31,7 @@ pipeline {
                 withCredentials([sshUserPrivateKey(credentialsId: 'node1-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
                     sh '''
                         echo "Starting deployment to Node 1..."
-                        scp -o StrictHostKeyChecking=no -i $SSH_KEY -r * ubuntu@3.110.221.180:/var/www/html/
+                        scp -o StrictHostKeyChecking=no -i $SSH_KEY -r * ubuntu@3.108.63.144:/var/www/html/
                         echo "Deployment completed successfully!"
                     '''
                 }
