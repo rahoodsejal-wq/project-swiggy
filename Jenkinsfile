@@ -25,10 +25,10 @@ pipeline {
 
         stage('Deploy to Apache Web Root') {
             steps {
-                // Clears the old web root files and moves the new build assets into place
+                // Transfers compiled assets via SSH/SCP to your Apache server (Node 1)
                 sh '''
-                    sudo rm -rf /var/www/html/*
-                    sudo cp -r build/* /var/www/html/
+                    ssh -o StrictHostKeyChecking=no ubuntu@3.108.63.144 "sudo rm -rf /var/www/html/*"
+                    scp -o StrictHostKeyChecking=no -r build/* ubuntu@3.108.63.144:/var/www/html/
                 '''
             }
         }
