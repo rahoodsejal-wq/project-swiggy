@@ -27,8 +27,8 @@ pipeline {
             steps {
                 // Transfers compiled assets via SSH/SCP to your Apache server (Node 1)
                 sh '''
-                    ssh -o StrictHostKeyChecking=no ubuntu@<NEW_NODE_1_IP> "sudo rm -rf /var/www/html/*"
-                    scp -o StrictHostKeyChecking=no -r build/* ubuntu@<NEW_NODE_1_IP>:/var/www/html/
+                    ssh -o StrictHostKeyChecking=no ubuntu@65.0.127.238 "sudo rm -rf /var/www/html/*"
+                    scp -o StrictHostKeyChecking=no -r build/* ubuntu@65.0.127.238:/var/www/html/
                 '''
             }
         }
