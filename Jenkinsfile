@@ -1,50 +1,45 @@
 pipeline {
     agent any
-    
+
     stages {
-        stage('Checkout Code') {
+        stage('Checkout from SCM') {
             steps {
-                cleanWs()
-                git branch: 'master', url: 'https://github.com/rahoodsejal-wq/project-swiggy'
+                // Automatically checks out code from the configured Git repository
+                checkout scm
             }
         }
 
-        
-    stage('Install Dependencies') {
-    steps {
-        sh '''
-            echo "Setting up Node.js locally..."
-            curl -O https://nodejs.org/dist/v18.16.0/node-v18.16.0-linux-x64.tar.gz
-            tar -xzf node-v18.16.0-linux-x64.tar.gz
-            export PATH=$PWD/node-v18.16.0-linux-x64/bin:$PATH
-            node -v
-            npm -v
-            npm install
-        '''
+        stage('Install Dependencies') {
+            steps {
+                // Installs project packages using Node.js
+                sh 'npm install'
             }
         }
-        
 
-        
-        stage('Deploy to Node 1 via SCP') {
+        stage('Build React App') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'node1-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
-                    sh '''
-                        echo "Starting deployment to Node 1..."
-                        scp -o StrictHostKeyChecking=no -i $SSH_KEY -r * ubuntu@3.108.63.144:/var/www/html/
-                        echo "Deployment completed successfully!"
-                    '''
-                }
+                // Compiles the React application into production static assets
+                sh 'npm run build'
+            }
+        }
+
+        stage('Deploy to Apache Web Root') {
+            steps {
+                // Clears the old web root files and moves the new build assets into place
+                sh '''
+                    sudo rm -rf /var/www/html/*
+                    sudo cp -r build/* /var/www/html/
+                '''
             }
         }
     }
-    
+
     post {
         success {
-            echo 'Pipeline executed successfully and application is live!'
+            echo 'Pipeline executed successfully! Swiggy app is live.'
         }
         failure {
-            echo 'Pipeline failed. Please check logs for details.'
+            echo 'Pipeline failed. Check logs for details.'
         }
     }
 }
